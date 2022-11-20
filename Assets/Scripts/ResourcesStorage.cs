@@ -49,7 +49,7 @@ public class ResourcesStorage : MonoBehaviour
         return true;
     }
 
-    private void UpdateAllPositionsStartsFrom(int startIndex)
+    protected void UpdateAllPositionsStartsFrom(int startIndex)
     {
         for (int i = startIndex; i < _resources.Count; i++)
             _resources[i].GoTo(CalculateLocalPositionFor(i), _resourceParent);
@@ -77,7 +77,7 @@ public class ResourcesStorage : MonoBehaviour
         return false;
     }
 
-    public bool TryToGiveOneResource(out Resource resource)
+    public bool TryToGiveResource(out Resource resource)
     {
         resource = null;
 

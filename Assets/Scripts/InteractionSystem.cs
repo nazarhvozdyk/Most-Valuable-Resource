@@ -23,13 +23,8 @@ public class InteractionSystem : MonoBehaviour
 
     private InteractionState _currentInteractionState = InteractionState.None;
 
-    // stotage we interact with at the moment
+    // storage, we interact with at the moment
     private ResourcesStorage _currentResourcesStorage;
-
-    private void Start()
-    {
-        Application.targetFrameRate = 25;
-    }
 
     private void Update()
     {
@@ -94,6 +89,9 @@ public class InteractionSystem : MonoBehaviour
         {
             if (colliders[i].TryGetComponent<ResourcesStorage>(out resourcesStorage))
             {
+                // if found storage is fuel storage player gives him the resources
+                // otherwise player takes the resources
+
                 if (resourcesStorage is FuelStorage)
                 {
                     if (resourcesStorage.IsFull)
@@ -126,7 +124,7 @@ public class InteractionSystem : MonoBehaviour
             Resource takenResource = null;
 
             // try take resource from storage
-            if (!resourcesStorage.TryToGiveOneResource(out takenResource))
+            if (!resourcesStorage.TryToGiveResource(out takenResource))
             {
                 // if its not posible stop coroutine
                 StopCoroutine(TakeResourcesFrom(resourcesStorage));

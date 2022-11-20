@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 
+// we can use factory with 0 fuel resources instead of mine
+// but i think it would be better to split those
 public class Mine : MonoBehaviour
 {
     [SerializeField]

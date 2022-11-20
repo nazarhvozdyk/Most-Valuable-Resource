@@ -79,7 +79,7 @@ MonoBehaviour:
   _miningResourcePrefab: {fileID: 1204947990188877835, guid: c4707be3c8641bf4f990461e52d160ef,
     type: 3}
   _minedResourcesStorage: {fileID: 3642210014811001042}
-  _resourcesInMinute: 100
+  _resourcesInMinute: 120
 --- !u!1 &2642899376510538254
 GameObject:
   m_ObjectHideFlags: 0

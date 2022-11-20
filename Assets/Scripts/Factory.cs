@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -34,14 +35,22 @@ public class Factory : MonoBehaviour
     {
         get => _fuelResources;
     }
+    private bool _isProducing = false;
 
     private void OnEnable()
     {
         _prodactionRate = 60f / _resourcesInMinute;
     }
 
+    private Type[] _fuelResourcesTypes;
+
     private void Start()
     {
+        _fuelResourcesTypes = new Type[_fuelResources.Length];
+
+        for (int i = 0; i < _fuelResourcesTypes.Length; i++)
+            _fuelResourcesTypes[i] = _fuelResources[i].GetType();
+
         if (_fuelStorage.ResourcesCount > 0)
             StartProduction();
         else
@@ -66,28 +75,47 @@ public class Factory : MonoBehaviour
 
     private IEnumerator ProduceResources()
     {
-        while (_fuelStorage.ResourcesCount != 0)
+        while (true)
         {
-            if (_producedResourcesStorage.IsFull)
+            if (_fuelStorage.ResourcesCount < _fuelResources.Length)
             {
-                _producedResourcesStorage.onResourceTaken += OnResourceTakenFromFullStorage;
+                if (_isProducing)
+                    MessageSystem.Instance.OnFactoryStopped(_factoryName, _thereIsNoFuelString);
+
+                _isProducing = false;
+                // subscribe on resource added event so production
+                // continue when fuel storage get some fuel
+                _fuelStorage.onResourceAdded += OnFirstFuelResourceAdded;
                 StopProducing();
-                MessageSystem.Instance.OnFactoryStopped(_factoryName, _thereIsNoSpaceLeft);
                 yield break;
             }
 
-            _fuelStorage.RemoveOneResource();
+            if (_producedResourcesStorage.IsFull)
+            {
+                if (_isProducing)
+                    MessageSystem.Instance.OnFactoryStopped(_factoryName, _thereIsNoSpaceLeft);
+
+                _isProducing = false;
+                _producedResourcesStorage.onResourceTaken += OnResourceTakenFromFullStorage;
+                StopProducing();
+                yield break;
+            }
+
+            if (!_fuelStorage.TryToRemoveResourcesByTypes(_fuelResourcesTypes))
+            {
+                MessageSystem.Instance.OnFactoryStopped(_factoryName, _thereIsNoFuelString);
+                _fuelStorage.onResourceAdded += OnFirstFuelResourceAdded;
+                _isProducing = false;
+                StopProducing();
+                yield break;
+            }
 
             Resource producedResource = Instantiate(_producedResourcePrefab);
             producedResource.transform.position = _resourceStartPositionTransform.position;
 
             _producedResourcesStorage.TryToAddResource(producedResource);
+            _isProducing = true;
             yield return new WaitForSeconds(_prodactionRate);
         }
-
-        MessageSystem.Instance.OnFactoryStopped(_factoryName, _thereIsNoFuelString);
-        // subscribe on resource added event so production
-        // continue when fuel storage get some fuel
-        _fuelStorage.onResourceAdded += OnFirstFuelResourceAdded;
     }
 }
