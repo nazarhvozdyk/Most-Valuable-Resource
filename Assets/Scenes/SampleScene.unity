@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 181614846}
   - component: {fileID: 181614847}
+  - component: {fileID: 181614848}
   m_Layer: 0
   m_Name: MessageSystem
   m_TagString: Untagged
@@ -169,6 +170,18 @@ MonoBehaviour:
   _messagePrefab: {fileID: 8291717859049049685, guid: dc84ced7914380141b32a3c665fce6a9,
     type: 3}
   _messagesParent: {fileID: 802675754}
+--- !u!114 &181614848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 181614845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a6ba9560fa59841b5777f7c542cc02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -914,7 +927,7 @@ PrefabInstance:
     - target: {fileID: 2642899375638262096, guid: df7086874b860ca439aa8a8fd22482c8,
         type: 3}
       propertyPath: _resourcesInMinute
-      value: 50
+      value: 120
       objectReference: {fileID: 0}
     - target: {fileID: 2642899375638262098, guid: df7086874b860ca439aa8a8fd22482c8,
         type: 3}

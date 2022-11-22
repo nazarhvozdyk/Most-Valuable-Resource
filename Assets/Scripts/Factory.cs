@@ -103,7 +103,9 @@ public class Factory : MonoBehaviour
 
             if (!_fuelStorage.TryToRemoveResourcesByTypes(_fuelResourcesTypes))
             {
-                MessageSystem.Instance.OnFactoryStopped(_factoryName, _thereIsNoFuelString);
+                if (_isProducing)
+                    MessageSystem.Instance.OnFactoryStopped(_factoryName, _thereIsNoFuelString);
+
                 _fuelStorage.onResourceAdded += OnFirstFuelResourceAdded;
                 _isProducing = false;
                 StopProducing();

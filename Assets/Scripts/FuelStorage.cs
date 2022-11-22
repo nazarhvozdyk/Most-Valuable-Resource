@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class FuelStorage : ResourcesStorage
@@ -26,8 +24,8 @@ public class FuelStorage : ResourcesStorage
     {
         Resource[] resourcesToTake = new Resource[resourceTypes.Length];
         int resourcesToTakeCount = 0;
-        
-        // searching the resource by type 
+
+        // searching the resource by type
         for (int i = 0; i < resourceTypes.Length; i++)
         {
             bool isResourceFound = false;
@@ -35,7 +33,7 @@ public class FuelStorage : ResourcesStorage
             for (int j = 0; j < _resources.Count; j++)
             {
                 // skip the iteration if the resource was found
-                if(isResourceFound) 
+                if (isResourceFound)
                     continue;
 
                 if (resourceTypes[i] == _resources[j].GetType())
@@ -52,7 +50,7 @@ public class FuelStorage : ResourcesStorage
             return false;
 
         // destroy all found resources
-        // we can destroy resources if only we find all of them 
+        // we can destroy resources if only we find all of them
         for (int i = 0; i < resourcesToTake.Length; i++)
         {
             _resources.Remove(resourcesToTake[i]);
