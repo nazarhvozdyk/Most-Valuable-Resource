@@ -567,7 +567,7 @@ MonoBehaviour:
   _interactionLayer:
     serializedVersion: 2
     m_Bits: 8
-  _interactRate: 0.9
+  _interactRate: 0.2
 --- !u!4 &1048562869
 Transform:
   m_ObjectHideFlags: 0

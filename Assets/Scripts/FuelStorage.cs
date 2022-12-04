@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class FuelStorage : ResourcesStorage
@@ -9,14 +10,52 @@ public class FuelStorage : ResourcesStorage
     {
         get => _factory.FuelResources;
     }
+    private Dictionary<Type, int> _eachTypeAmount = new Dictionary<Type, int>();
+    private int _maxAmountOfEachResource;
+
+    private void OnEnable()
+    {
+        _maxAmountOfEachResource = _capacity / ResourcesToStore.Length;
+    }
+
+    private void Start()
+    {
+        for (int i = 0; i < ResourcesToStore.Length; i++)
+            _eachTypeAmount.Add(ResourcesToStore[i].GetType(), 0);
+    }
 
     public override bool TryToAddResource(Resource resource)
     {
-        for (int i = 0; i < _factory.FuelResources.Length; i++)
-            if (_factory.FuelResources[i].GetType() == resource.GetType())
-                return base.TryToAddResource(resource);
+        bool isResourceRequire = false;
 
-        return false;
+        Type resourceType = resource.GetType();
+
+        for (int i = 0; i < _factory.FuelResources.Length; i++)
+            if (_factory.FuelResources[i].GetType() == resourceType)
+                isResourceRequire = true;
+
+        if (!isResourceRequire)
+            return false;
+
+        if (_eachTypeAmount[resourceType] == _maxAmountOfEachResource)
+            return false;
+
+        bool isResourceAdded = base.TryToAddResource(resource);
+
+        if (isResourceAdded)
+            _eachTypeAmount[resourceType]++;
+
+        return isResourceAdded;
+    }
+
+    public override bool TryToGiveResourceByType(Type resourceType, out Resource resource)
+    {
+        bool isResourceGiven = base.TryToGiveResourceByType(resourceType, out resource);
+
+        if (isResourceGiven)
+            _eachTypeAmount[resourceType]--;
+
+        return isResourceGiven;
     }
 
     // returns true if resources were removed
@@ -53,6 +92,8 @@ public class FuelStorage : ResourcesStorage
         // we can destroy resources if only we find all of them
         for (int i = 0; i < resourcesToTake.Length; i++)
         {
+            Type typeOfTakenResource = resourcesToTake[i].GetType();
+            _eachTypeAmount[typeOfTakenResource]--;
             _resources.Remove(resourcesToTake[i]);
             Destroy(resourcesToTake[i].gameObject);
         }
@@ -60,13 +101,20 @@ public class FuelStorage : ResourcesStorage
         return true;
     }
 
-    public void RemoveResource()
+    public Type GetTypeOfNeededResource()
     {
-        int indexOfResource = _resources.Count - 1;
+        int smallestValue = _maxAmountOfEachResource;
+        Type smallestTypeAmount = null;
 
-        Resource resourceToRemove = _resources[indexOfResource];
-        _resources.RemoveAt(indexOfResource);
+        foreach (var item in _eachTypeAmount.Keys)
+        {
+            if (_eachTypeAmount[item] < smallestValue)
+            {
+                smallestValue = _eachTypeAmount[item];
+                smallestTypeAmount = item;
+            }
+        }
 
-        Destroy(resourceToRemove.gameObject);
+        return smallestTypeAmount;
     }
 }

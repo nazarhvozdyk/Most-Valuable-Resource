@@ -76,17 +76,17 @@ public class Factory : MonoBehaviour
         _producedResourcesStorage.onResourceTaken -= OnResourceTakenFromFullStorage;
     }
 
-    private void StartProduction() 
+    private void StartProduction()
     {
         StartCoroutine(TryToProduceResources());
-    } 
+    }
 
-    private void StopProducing(StopReason stopReason) 
+    private void StopProducing(StopReason stopReason)
     {
         _isProducing = false;
         StopCoroutine(TryToProduceResources());
         onFactoryStopped?.Invoke(stopReason);
-    } 
+    }
 
     private IEnumerator TryToProduceResources()
     {
@@ -94,7 +94,7 @@ public class Factory : MonoBehaviour
         {
             if (_producedResourcesStorage.IsFull)
             {
-                if (_isProducing) 
+                if (_isProducing)
                     StopProducing(StopReason.NoSpace);
 
                 _isProducing = false;
@@ -119,7 +119,7 @@ public class Factory : MonoBehaviour
 
             _producedResourcesStorage.TryToAddResource(producedResource);
 
-            if(_isProducing == false) 
+            if (_isProducing == false)
             {
                 onFactoryStartProducing?.Invoke();
                 _isProducing = true;

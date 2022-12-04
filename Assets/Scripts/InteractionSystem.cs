@@ -12,6 +12,7 @@ public class InteractionSystem : MonoBehaviour
 
     // time between taking and giving resources
     [SerializeField]
+    [Range(0.1f, 0.5f)]
     private float _interactRate = 0.2f;
 
     private enum InteractionState
@@ -28,10 +29,7 @@ public class InteractionSystem : MonoBehaviour
 
     private Coroutine _takingResourcesCoroutine;
     private Coroutine _givingResourcesCoroutine;
-    private void Start() 
-    {
-        Application.targetFrameRate = 15;
-    }
+
     private void Update()
     {
         ResourcesStorage playerStorage = Player.Instance.ResourcesStorage;
@@ -164,39 +162,19 @@ public class InteractionSystem : MonoBehaviour
 
         while (true)
         {
-            Resource resourceTakenFromPlayer = null;
+            Type typeOfNeededResource = fuelResourcesStorage.GetTypeOfNeededResource();
 
-            // try to add taken resource to player's storage
-            for (int i = 0; i < fuelResourcesStorage.ResourcesToStore.Length; i++)
-            {
-                // get the resource's type that stores the warehouse
-                Type typeOfNeededResource = fuelResourcesStorage.ResourcesToStore[i].GetType();
+            Resource resourceTakenFromPlayer;
 
-                // if fuel resource found, stop searching
-                if (
-                    playerStorage.TryToGiveResourceByType(
-                        typeOfNeededResource,
-                        out resourceTakenFromPlayer
-                    )
-                )
-                {
-                    // get out of serching loop
-                    i = fuelResourcesStorage.ResourcesToStore.Length;
-                }
-            }
+            bool isPlayerHasRequiredResource = playerStorage.TryToGiveResourceByType(
+                typeOfNeededResource,
+                out resourceTakenFromPlayer
+            );
 
-            // if resource that fuel storage needed not find stop coroutine
-            if (resourceTakenFromPlayer == null)
-            {
+            if (!isPlayerHasRequiredResource)
                 break;
-            }
 
-            if (!fuelResourcesStorage.TryToAddResource(resourceTakenFromPlayer))
-            {
-                // return taken resource to resource storage
-                playerStorage.TryToAddResource(resourceTakenFromPlayer);
-                break;
-            }
+            fuelResourcesStorage.TryToAddResource(resourceTakenFromPlayer);
 
             yield return new WaitForSeconds(_interactRate);
         }

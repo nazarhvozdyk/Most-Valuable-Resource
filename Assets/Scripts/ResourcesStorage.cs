@@ -9,7 +9,7 @@ public class ResourcesStorage : MonoBehaviour
     private Transform _resourceParent;
 
     [SerializeField]
-    private int _capacity = 20;
+    protected int _capacity = 20;
 
     [SerializeField]
     private int _rowsCount = 4;
@@ -55,7 +55,7 @@ public class ResourcesStorage : MonoBehaviour
             _resources[i].GoTo(CalculateLocalPositionFor(i), _resourceParent);
     }
 
-    public bool TryToGiveResourceByType(Type resourceType, out Resource resource)
+    public virtual bool TryToGiveResourceByType(Type resourceType, out Resource resource)
     {
         resource = null;
 
