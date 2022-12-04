@@ -5,8 +5,11 @@ using UnityEngine;
 [DefaultExecutionOrder(1)]
 public class Factory : MonoBehaviour
 {
-    private static readonly string _thereIsNoFuelString = "there is no fuel anymore";
-    private static readonly string _thereIsNoSpaceLeft = "there is no space left for new resources";
+    public enum StopReason
+    {
+        NoFuel,
+        NoSpace
+    }
 
     [SerializeField]
     private string _factoryName = "Factory";
@@ -43,6 +46,10 @@ public class Factory : MonoBehaviour
     }
 
     private Type[] _fuelResourcesTypes;
+    public delegate void FactoryStopHandler(StopReason stopReason);
+    public event FactoryStopHandler onFactoryStopped;
+    public delegate void FactoryStartHandler();
+    public event FactoryStartHandler onFactoryStartProducing;
 
     private void Start()
     {
@@ -69,46 +76,41 @@ public class Factory : MonoBehaviour
         _producedResourcesStorage.onResourceTaken -= OnResourceTakenFromFullStorage;
     }
 
-    private void StartProduction() => StartCoroutine(ProduceResources());
+    private void StartProduction() 
+    {
+        StartCoroutine(TryToProduceResources());
+    } 
 
-    private void StopProducing() => StopCoroutine(ProduceResources());
+    private void StopProducing(StopReason stopReason) 
+    {
+        _isProducing = false;
+        StopCoroutine(TryToProduceResources());
+        onFactoryStopped?.Invoke(stopReason);
+    } 
 
-    private IEnumerator ProduceResources()
+    private IEnumerator TryToProduceResources()
     {
         while (true)
         {
-            if (_fuelStorage.ResourcesCount < _fuelResources.Length)
-            {
-                if (_isProducing)
-                    MessageSystem.Instance.OnFactoryStopped(_factoryName, _thereIsNoFuelString);
-
-                _isProducing = false;
-                // subscribe on resource added event so production
-                // continue when fuel storage get some fuel
-                _fuelStorage.onResourceAdded += OnFirstFuelResourceAdded;
-                StopProducing();
-                yield break;
-            }
-
             if (_producedResourcesStorage.IsFull)
             {
-                if (_isProducing)
-                    MessageSystem.Instance.OnFactoryStopped(_factoryName, _thereIsNoSpaceLeft);
+                if (_isProducing) 
+                    StopProducing(StopReason.NoSpace);
 
                 _isProducing = false;
                 _producedResourcesStorage.onResourceTaken += OnResourceTakenFromFullStorage;
-                StopProducing();
                 yield break;
             }
 
             if (!_fuelStorage.TryToRemoveResourcesByTypes(_fuelResourcesTypes))
             {
                 if (_isProducing)
-                    MessageSystem.Instance.OnFactoryStopped(_factoryName, _thereIsNoFuelString);
+                    StopProducing(StopReason.NoFuel);
 
+                // subscribe on resource added event so production
+                // continue when fuel storage get some fuel
                 _fuelStorage.onResourceAdded += OnFirstFuelResourceAdded;
                 _isProducing = false;
-                StopProducing();
                 yield break;
             }
 
@@ -116,7 +118,13 @@ public class Factory : MonoBehaviour
             producedResource.transform.position = _resourceStartPositionTransform.position;
 
             _producedResourcesStorage.TryToAddResource(producedResource);
-            _isProducing = true;
+
+            if(_isProducing == false) 
+            {
+                onFactoryStartProducing?.Invoke();
+                _isProducing = true;
+            }
+
             yield return new WaitForSeconds(_prodactionRate);
         }
     }

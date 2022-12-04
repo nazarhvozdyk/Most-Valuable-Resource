@@ -26,8 +26,15 @@ public class InteractionSystem : MonoBehaviour
     // storage, we interact with at the moment
     private ResourcesStorage _currentResourcesStorage;
 
+    private Coroutine _takingResourcesCoroutine;
+    private Coroutine _givingResourcesCoroutine;
+    private void Start() 
+    {
+        Application.targetFrameRate = 15;
+    }
     private void Update()
     {
+        ResourcesStorage playerStorage = Player.Instance.ResourcesStorage;
         Vector3 playerPosition = Player.Instance.transform.position;
 
         if (_currentInteractionState == InteractionState.GivingResources)
@@ -43,7 +50,7 @@ public class InteractionSystem : MonoBehaviour
             if (distanceToStorage > _interactionRadious)
             {
                 _currentInteractionState = InteractionState.None;
-                StopCoroutine(GiveResourcesTo(_currentResourcesStorage as FuelStorage));
+                StopCoroutine(_givingResourcesCoroutine);
                 _currentResourcesStorage = null;
             }
 
@@ -63,7 +70,7 @@ public class InteractionSystem : MonoBehaviour
             if (distanceToStorage > _interactionRadious)
             {
                 _currentInteractionState = InteractionState.None;
-                StopCoroutine(TakeResourcesFrom(_currentResourcesStorage));
+                StopCoroutine(_takingResourcesCoroutine);
                 _currentResourcesStorage = null;
             }
 
@@ -71,8 +78,8 @@ public class InteractionSystem : MonoBehaviour
         }
 
         // searching the storage
-
-        Collider[] colliders = new Collider[1];
+        int interactionsAtOnce = 1;
+        Collider[] colliders = new Collider[interactionsAtOnce];
         int collidersCount = Physics.OverlapSphereNonAlloc(
             playerPosition,
             _interactionRadious,
@@ -83,34 +90,43 @@ public class InteractionSystem : MonoBehaviour
         if (collidersCount == 0)
             return;
 
-        ResourcesStorage resourcesStorage;
+        ResourcesStorage resourcesStorageToInteract;
 
         for (int i = 0; i < colliders.Length; i++)
         {
-            if (colliders[i].TryGetComponent<ResourcesStorage>(out resourcesStorage))
+            if (colliders[i].TryGetComponent<ResourcesStorage>(out resourcesStorageToInteract))
             {
                 // if found storage is fuel storage player gives him the resources
                 // otherwise player takes the resources
 
-                if (resourcesStorage is FuelStorage)
+                if (resourcesStorageToInteract is FuelStorage)
                 {
-                    if (resourcesStorage.IsFull)
+                    if (playerStorage.IsEmpty)
                         return;
 
-                    StartCoroutine(GiveResourcesTo(resourcesStorage as FuelStorage));
+                    if (resourcesStorageToInteract.IsFull)
+                        return;
+
                     _currentInteractionState = InteractionState.GivingResources;
+                    _givingResourcesCoroutine = StartCoroutine(
+                        GiveResourcesTo(resourcesStorageToInteract as FuelStorage)
+                    );
                 }
                 else
                 {
-                    if (resourcesStorage.IsEmpty)
+                    if (playerStorage.IsFull)
                         return;
 
-                    StartCoroutine(TakeResourcesFrom(resourcesStorage));
+                    if (resourcesStorageToInteract.IsEmpty)
+                        return;
+
                     _currentInteractionState = InteractionState.TakingResources;
+                    _takingResourcesCoroutine = StartCoroutine(
+                        TakeResourcesFrom(resourcesStorageToInteract)
+                    );
                 }
 
-                _currentResourcesStorage = resourcesStorage;
-                return;
+                _currentResourcesStorage = resourcesStorageToInteract;
             }
         }
     }
@@ -126,25 +142,20 @@ public class InteractionSystem : MonoBehaviour
             // try take resource from storage
             if (!resourcesStorage.TryToGiveResource(out takenResource))
             {
-                // if its not posible stop coroutine
-                StopCoroutine(TakeResourcesFrom(resourcesStorage));
-                _currentInteractionState = InteractionState.None;
-                yield break;
+                break;
             }
             // try to add taken resource to player's storage
             if (!playerStorage.TryToAddResource(takenResource))
             {
-                // if its not posible stop coroutine
-                StopCoroutine(TakeResourcesFrom(resourcesStorage));
-                _currentInteractionState = InteractionState.None;
-
-                // and return taken resource to resource storage
+                // return taken resource to resource storage
                 resourcesStorage.TryToAddResource(takenResource);
-                yield break;
+                break;
             }
 
             yield return new WaitForSeconds(_interactRate);
         }
+
+        _currentInteractionState = InteractionState.None;
     }
 
     private IEnumerator GiveResourcesTo(FuelStorage fuelResourcesStorage)
@@ -169,30 +180,27 @@ public class InteractionSystem : MonoBehaviour
                     )
                 )
                 {
-                    break;
+                    // get out of serching loop
+                    i = fuelResourcesStorage.ResourcesToStore.Length;
                 }
             }
 
             // if resource that fuel storage needed not find stop coroutine
             if (resourceTakenFromPlayer == null)
             {
-                StopCoroutine(GiveResourcesTo(fuelResourcesStorage));
-                _currentInteractionState = InteractionState.None;
-                yield break;
+                break;
             }
 
             if (!fuelResourcesStorage.TryToAddResource(resourceTakenFromPlayer))
             {
-                // if its not posible stop coroutine
-                StopCoroutine(GiveResourcesTo(fuelResourcesStorage));
-                _currentInteractionState = InteractionState.None;
-
-                // and return taken resource to resource storage
+                // return taken resource to resource storage
                 playerStorage.TryToAddResource(resourceTakenFromPlayer);
-                yield break;
+                break;
             }
 
             yield return new WaitForSeconds(_interactRate);
         }
+
+        _currentInteractionState = InteractionState.None;
     }
 }
