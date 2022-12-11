@@ -12,7 +12,7 @@ public class InteractionSystem : MonoBehaviour
 
     // time between taking and giving resources
     [SerializeField]
-    [Range(0.1f, 0.5f)]
+    [Range(0.01f, 0.3f)]
     private float _interactRate = 0.2f;
 
     private enum InteractionState
@@ -24,11 +24,16 @@ public class InteractionSystem : MonoBehaviour
 
     private InteractionState _currentInteractionState = InteractionState.None;
 
-    // storage, we interact with at the moment
-    private ResourcesStorage _currentResourcesStorage;
-
     private Coroutine _takingResourcesCoroutine;
     private Coroutine _givingResourcesCoroutine;
+
+    // storable object, we interact with at the moment
+    private IStorable _currentStorableObject;
+
+    private void Start()
+    {
+        Application.targetFrameRate = 15;
+    }
 
     private void Update()
     {
@@ -40,16 +45,10 @@ public class InteractionSystem : MonoBehaviour
             // if distance beetwen player and storage more tran interaction radious
             // stop giving the resources
 
-            float distanceToStorage = Vector3.Distance(
-                playerPosition,
-                _currentResourcesStorage.transform.position
-            );
-
-            if (distanceToStorage > _interactionRadious)
+            if (!IsPointInRange(_currentStorableObject.GetStoragePosition()))
             {
                 _currentInteractionState = InteractionState.None;
                 StopCoroutine(_givingResourcesCoroutine);
-                _currentResourcesStorage = null;
             }
 
             return;
@@ -60,16 +59,10 @@ public class InteractionSystem : MonoBehaviour
             // if distance beetwen player and storage more tran interaction radious
             // stop taking the resources
 
-            float distanceToStorage = Vector3.Distance(
-                playerPosition,
-                _currentResourcesStorage.transform.position
-            );
-
-            if (distanceToStorage > _interactionRadious)
+            if (!IsPointInRange(_currentStorableObject.GetStoragePosition()))
             {
                 _currentInteractionState = InteractionState.None;
                 StopCoroutine(_takingResourcesCoroutine);
-                _currentResourcesStorage = null;
             }
 
             return;
@@ -88,81 +81,77 @@ public class InteractionSystem : MonoBehaviour
         if (collidersCount == 0)
             return;
 
-        ResourcesStorage resourcesStorageToInteract;
-
         for (int i = 0; i < colliders.Length; i++)
         {
-            if (colliders[i].TryGetComponent<ResourcesStorage>(out resourcesStorageToInteract))
+            if (colliders[i].TryGetComponent<IStorable>(out _currentStorableObject))
             {
                 // if found storage is fuel storage player gives him the resources
                 // otherwise player takes the resources
 
-                if (resourcesStorageToInteract is FuelStorage)
+                if (_currentStorableObject is FuelStorage)
                 {
-                    if (playerStorage.IsEmpty)
-                        return;
-
-                    if (resourcesStorageToInteract.IsFull)
+                    if (_currentStorableObject.IsFull())
                         return;
 
                     _currentInteractionState = InteractionState.GivingResources;
-                    _givingResourcesCoroutine = StartCoroutine(
-                        GiveResourcesTo(resourcesStorageToInteract as FuelStorage)
-                    );
+                    _givingResourcesCoroutine = StartCoroutine(GiveResources());
                 }
                 else
                 {
-                    if (playerStorage.IsFull)
-                        return;
-
-                    if (resourcesStorageToInteract.IsEmpty)
+                    if (_currentStorableObject.IsEmpty())
                         return;
 
                     _currentInteractionState = InteractionState.TakingResources;
-                    _takingResourcesCoroutine = StartCoroutine(
-                        TakeResourcesFrom(resourcesStorageToInteract)
-                    );
+                    _takingResourcesCoroutine = StartCoroutine(TakeResources());
                 }
-
-                _currentResourcesStorage = resourcesStorageToInteract;
             }
         }
     }
 
-    private IEnumerator TakeResourcesFrom(ResourcesStorage resourcesStorage)
+    // returns true if point in interaction range of player
+    private bool IsPointInRange(Vector3 point)
     {
-        ResourcesStorage playerStorage = Player.Instance.ResourcesStorage;
+        Vector3 playerPosition = Player.Instance.transform.position;
+        return Vector3.Distance(playerPosition, point) < _interactionRadious;
+    }
+
+    private IEnumerator TakeResources()
+    {
+        IStorable playerStorage = Player.Instance.ResourcesStorage;
 
         while (true)
         {
             Resource takenResource = null;
 
-            // try take resource from storage
-            if (!resourcesStorage.TryToGiveResource(out takenResource))
-            {
+            if (playerStorage.IsFull())
                 break;
-            }
-            // try to add taken resource to player's storage
-            if (!playerStorage.TryToAddResource(takenResource))
-            {
-                // return taken resource to resource storage
-                resourcesStorage.TryToAddResource(takenResource);
-                break;
-            }
 
+            if (!_currentStorableObject.TryToGiveResource(out takenResource))
+                break;
+
+            playerStorage.TryToAddResource(takenResource);
             yield return new WaitForSeconds(_interactRate);
         }
 
         _currentInteractionState = InteractionState.None;
     }
 
-    private IEnumerator GiveResourcesTo(FuelStorage fuelResourcesStorage)
+    private IEnumerator GiveResources()
     {
-        ResourcesStorage playerStorage = Player.Instance.ResourcesStorage;
+        IStorable playerStorage = Player.Instance.ResourcesStorage;
 
         while (true)
         {
-            Type typeOfNeededResource = fuelResourcesStorage.GetTypeOfNeededResource();
+            if (playerStorage.IsEmpty())
+                break;
+
+            if (_currentStorableObject.IsFull())
+                break;
+
+            Type typeOfNeededResource = _currentStorableObject.GetTypeOfNeededResource();
+
+            if (typeOfNeededResource == null)
+                break;
 
             Resource resourceTakenFromPlayer;
 
@@ -174,7 +163,7 @@ public class InteractionSystem : MonoBehaviour
             if (!isPlayerHasRequiredResource)
                 break;
 
-            fuelResourcesStorage.TryToAddResource(resourceTakenFromPlayer);
+            _currentStorableObject.TryToAddResource(resourceTakenFromPlayer);
 
             yield return new WaitForSeconds(_interactRate);
         }

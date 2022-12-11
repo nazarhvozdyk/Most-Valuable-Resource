@@ -101,7 +101,7 @@ public class FuelStorage : ResourcesStorage
         return true;
     }
 
-    public Type GetTypeOfNeededResource()
+    public override Type GetTypeOfNeededResource()
     {
         int smallestValue = _maxAmountOfEachResource;
         Type smallestTypeAmount = null;

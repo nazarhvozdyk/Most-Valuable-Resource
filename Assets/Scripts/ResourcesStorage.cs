@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResourcesStorage : MonoBehaviour
+public class ResourcesStorage : MonoBehaviour, IStorable
 {
     // the position of first resource
     [SerializeField]
@@ -25,16 +25,6 @@ public class ResourcesStorage : MonoBehaviour
     public event ResourceAddedHandler onResourceAdded;
     public delegate void ResourceTakenHandler();
     public event ResourceTakenHandler onResourceTaken;
-
-    public bool IsFull
-    {
-        get => _resources.Count == _capacity;
-    }
-
-    public bool IsEmpty
-    {
-        get => _resources.Count == 0;
-    }
 
     public virtual bool TryToAddResource(Resource resource)
     {
@@ -59,7 +49,7 @@ public class ResourcesStorage : MonoBehaviour
     {
         resource = null;
 
-        if (IsEmpty)
+        if (IsEmpty())
             return false;
 
         for (int i = _resources.Count - 1; i >= 0; i--)
@@ -81,7 +71,7 @@ public class ResourcesStorage : MonoBehaviour
     {
         resource = null;
 
-        if (IsEmpty)
+        if (IsEmpty())
             return false;
 
         resource = _resources[_resources.Count - 1];
@@ -112,5 +102,25 @@ public class ResourcesStorage : MonoBehaviour
         Vector3 position = new Vector3(x, y, z) * GridInfo.Instance.GridOffset;
 
         return position;
+    }
+
+    public Vector3 GetStoragePosition()
+    {
+        return transform.position;
+    }
+
+    public virtual Type GetTypeOfNeededResource()
+    {
+        return _resources[_resources.Count - 1].GetType();
+    }
+
+    public bool IsFull()
+    {
+        return _resources.Count == _capacity;
+    }
+
+    public bool IsEmpty()
+    {
+        return _resources.Count == 0;
     }
 }

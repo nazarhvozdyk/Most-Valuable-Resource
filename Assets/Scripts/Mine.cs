@@ -33,7 +33,7 @@ public class Mine : MonoBehaviour
 
     private IEnumerator MineResources()
     {
-        while (!_minedResourcesStorage.IsFull)
+        while (!_minedResourcesStorage.IsFull())
         {
             Resource minedResource = Instantiate(_miningResourcePrefab);
 

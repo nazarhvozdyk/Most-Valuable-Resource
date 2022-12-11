@@ -11,9 +11,6 @@ public class Factory : MonoBehaviour
         NoSpace
     }
 
-    [SerializeField]
-    private string _factoryName = "Factory";
-
     // resources that factory use as fuel
     [SerializeField]
     private Resource[] _fuelResources;
@@ -92,7 +89,7 @@ public class Factory : MonoBehaviour
     {
         while (true)
         {
-            if (_producedResourcesStorage.IsFull)
+            if (_producedResourcesStorage.IsFull())
             {
                 if (_isProducing)
                     StopProducing(StopReason.NoSpace);
