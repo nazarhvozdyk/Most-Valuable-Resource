@@ -20,11 +20,16 @@ public class ResourcesStorage : MonoBehaviour, IStorable
     {
         get => _resources.Count;
     }
-    protected List<Resource> _resources = new List<Resource>();
+    protected List<Resource> _resources;
     public delegate void ResourceAddedHandler();
     public event ResourceAddedHandler onResourceAdded;
     public delegate void ResourceTakenHandler();
     public event ResourceTakenHandler onResourceTaken;
+
+    protected virtual void Awake()
+    {
+        _resources = new List<Resource>(_capacity);
+    }
 
     public virtual bool TryToAddResource(Resource resource)
     {
@@ -109,9 +114,11 @@ public class ResourcesStorage : MonoBehaviour, IStorable
         return transform.position;
     }
 
-    public virtual Type GetTypeOfNeededResource()
+    public virtual Type[] GetTypesOfNeededResources()
     {
-        return _resources[_resources.Count - 1].GetType();
+        Type[] types = new Type[1];
+        types[0] = _resources[_resources.Count - 1].GetType();
+        return types;
     }
 
     public bool IsFull()

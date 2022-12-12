@@ -4,8 +4,18 @@ using UnityEngine;
 
 public class InteractionSystem : MonoBehaviour
 {
+    private static InteractionSystem _instance;
+    public static InteractionSystem Instance
+    {
+        get => _instance;
+    }
+
     [SerializeField]
     private float _interactionRadious = 2;
+    public float InteractionDistance
+    {
+        get => _interactionRadious;
+    }
 
     [SerializeField]
     private LayerMask _interactionLayer;
@@ -30,9 +40,9 @@ public class InteractionSystem : MonoBehaviour
     // storable object, we interact with at the moment
     private IStorable _currentStorableObject;
 
-    private void Start()
+    private void Awake()
     {
-        Application.targetFrameRate = 15;
+        _instance = this;
     }
 
     private void Update()
@@ -87,8 +97,7 @@ public class InteractionSystem : MonoBehaviour
             {
                 // if found storage is fuel storage player gives him the resources
                 // otherwise player takes the resources
-
-                if (_currentStorableObject is FuelStorage)
+                if (_currentStorableObject.GetType().IsSubclassOf(typeof(FuelStorage)))
                 {
                     if (_currentStorableObject.IsFull())
                         return;
@@ -148,22 +157,32 @@ public class InteractionSystem : MonoBehaviour
             if (_currentStorableObject.IsFull())
                 break;
 
-            Type typeOfNeededResource = _currentStorableObject.GetTypeOfNeededResource();
+            Type[] typesOfNeededResources = _currentStorableObject.GetTypesOfNeededResources();
 
-            if (typeOfNeededResource == null)
+            if (typesOfNeededResources == null)
                 break;
 
-            Resource resourceTakenFromPlayer;
+            bool isResourceGiven = false;
 
-            bool isPlayerHasRequiredResource = playerStorage.TryToGiveResourceByType(
-                typeOfNeededResource,
-                out resourceTakenFromPlayer
-            );
+            for (int i = 0; i < typesOfNeededResources.Length; i++)
+            {
+                Resource resourceTakenFromPlayer;
 
-            if (!isPlayerHasRequiredResource)
+                bool isPlayerHasRequiredResource = playerStorage.TryToGiveResourceByType(
+                    typesOfNeededResources[i],
+                    out resourceTakenFromPlayer
+                );
+
+                if (!isPlayerHasRequiredResource)
+                    continue;
+
+                _currentStorableObject.TryToAddResource(resourceTakenFromPlayer);
+                isResourceGiven = true;
+                i = typesOfNeededResources.Length;
+            }
+
+            if (!isResourceGiven)
                 break;
-
-            _currentStorableObject.TryToAddResource(resourceTakenFromPlayer);
 
             yield return new WaitForSeconds(_interactRate);
         }

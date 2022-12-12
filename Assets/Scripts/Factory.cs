@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 
 [DefaultExecutionOrder(1)]
-public class Factory : MonoBehaviour
+public class Factory : Building
 {
     public enum StopReason
     {
@@ -19,7 +19,7 @@ public class Factory : MonoBehaviour
     private Resource _producedResourcePrefab;
 
     [SerializeField]
-    private FuelStorage _fuelStorage;
+    private FactoryFuelStorage _fuelStorage;
 
     [SerializeField]
     private ResourcesStorage _producedResourcesStorage;
