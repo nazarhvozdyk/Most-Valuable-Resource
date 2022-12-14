@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5af5e00189de5ab418f737a094c69706, type: 3}
   m_Name: PointerImagesData
   m_EditorClassIdentifier: 
-  _noFuelSprite: {fileID: 21300000, guid: 2cfbf6619eb047545a425e8a31732c83, type: 3}
-  _noSpaceSprite: {fileID: 21300000, guid: 74ef721fef79c44489d4e3edb0ab0c01, type: 3}
+  _noFuelSprite: {fileID: 21300000, guid: 0961fb634826a264da05a770e2692b9f, type: 3}
+  _noSpaceSprite: {fileID: 21300000, guid: 24fd29cba1605264eb564d269bdd6a7e, type: 3}

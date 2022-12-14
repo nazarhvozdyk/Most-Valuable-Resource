@@ -5,9 +5,16 @@ using System.Collections.Generic;
 public class BuildingStorage : FuelStorage
 {
     [SerializeField]
+    private CreateBuildingPointer _buildingPointerPrefab;
+
+    [SerializeField]
+    private Transform _pointerPositionTransform;
+
+    [SerializeField]
     private Building _buildingToBuildPrefab;
     private Dictionary<Type, int> _buildingPrice;
     private Dictionary<Type, int> _eachTypeAmount = new Dictionary<Type, int>();
+    private CreateBuildingPointer _pointer;
 
     protected override void Awake()
     {
@@ -19,7 +26,15 @@ public class BuildingStorage : FuelStorage
             _eachTypeAmount.Add(item.Key, 0);
             _capacity += item.Value;
         }
+
         base.Awake();
+    }
+
+    private void Start()
+    {
+        Canvas canvas = BuildingStoragesCanvasReference.Instance.Canvas;
+        _pointer = Instantiate(_buildingPointerPrefab, canvas.transform);
+        _pointer.SetUp(_pointerPositionTransform.position);
     }
 
     public override Type[] GetTypesOfNeededResources()
@@ -65,10 +80,7 @@ public class BuildingStorage : FuelStorage
             bool isEnoungh = CheckIfEnoughToBuild();
 
             if (isEnoungh)
-            {
                 BuildBuilding();
-                return false;
-            }
         }
 
         return isResourceAdded;
@@ -91,5 +103,6 @@ public class BuildingStorage : FuelStorage
         Building newBuilding = Instantiate(_buildingToBuildPrefab);
         newBuilding.transform.position = transform.position;
         gameObject.SetActive(false);
+        Destroy(_pointer.gameObject);
     }
 }

@@ -76,6 +76,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5d1e3c7fbf3da54b941b1f179409188, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _price: []
   _miningResourcePrefab: {fileID: 1204947990188877835, guid: c4707be3c8641bf4f990461e52d160ef,
     type: 3}
   _minedResourcesStorage: {fileID: 3642210014811001042}
@@ -191,7 +192,7 @@ PrefabInstance:
     - target: {fileID: 1596187747490925334, guid: d3378a0cdabba2c4b8434ccac85a95be,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.25
+      value: 4.25
       objectReference: {fileID: 0}
     - target: {fileID: 1596187747490925334, guid: d3378a0cdabba2c4b8434ccac85a95be,
         type: 3}

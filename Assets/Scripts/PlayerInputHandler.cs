@@ -30,7 +30,7 @@ public class PlayerInputHandler : MonoBehaviour
         float clampedMagnitude = Mathf.Clamp(deltaMagnitude, 0f, 1f);
         Vector3 deltaNormalized = delta.normalized * clampedMagnitude;
 
-        Vector2 newMoveDirection = new Vector2(deltaNormalized.x, deltaNormalized.y);
+        Vector2 newMoveDirection = new Vector2(deltaNormalized.x, deltaNormalized.y) * -1;
         _playerMove.SetMoveDirection(newMoveDirection);
     }
 }
