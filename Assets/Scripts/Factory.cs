@@ -61,13 +61,13 @@ public class Factory : Building
             _fuelStorage.onResourceAdded += OnFirstFuelResourceAdded;
     }
 
-    private void OnFirstFuelResourceAdded()
+    private void OnFirstFuelResourceAdded(Type typeOfResource)
     {
         StartProduction();
         _fuelStorage.onResourceAdded -= OnFirstFuelResourceAdded;
     }
 
-    private void OnResourceTakenFromFullStorage()
+    private void OnResourceTakenFromFullStorage(Type resourceType)
     {
         StartProduction();
         _producedResourcesStorage.onResourceTaken -= OnResourceTakenFromFullStorage;

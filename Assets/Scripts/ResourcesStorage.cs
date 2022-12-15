@@ -21,9 +21,9 @@ public class ResourcesStorage : MonoBehaviour, IStorable
         get => _resources.Count;
     }
     protected List<Resource> _resources;
-    public delegate void ResourceAddedHandler();
+    public delegate void ResourceAddedHandler(Type addedResourceType);
     public event ResourceAddedHandler onResourceAdded;
-    public delegate void ResourceTakenHandler();
+    public delegate void ResourceTakenHandler(Type takenResourceType);
     public event ResourceTakenHandler onResourceTaken;
 
     protected virtual void Awake()
@@ -39,7 +39,7 @@ public class ResourcesStorage : MonoBehaviour, IStorable
         resource.GoTo(CalculateNextLocalPosition(), _resourceParent);
         _resources.Add(resource);
 
-        onResourceAdded?.Invoke();
+        onResourceAdded?.Invoke(resource.GetType());
 
         return true;
     }
@@ -65,6 +65,7 @@ public class ResourcesStorage : MonoBehaviour, IStorable
                 _resources.RemoveAt(i);
                 // update the position to avoid epmty space
                 UpdateAllPositionsStartsFrom(i);
+                onResourceTaken?.Invoke(resource.GetType());
                 return true;
             }
         }
@@ -82,7 +83,7 @@ public class ResourcesStorage : MonoBehaviour, IStorable
         resource = _resources[_resources.Count - 1];
         _resources.RemoveAt(_resources.Count - 1);
 
-        onResourceTaken?.Invoke();
+        onResourceTaken?.Invoke(resource.GetType());
         return true;
     }
 

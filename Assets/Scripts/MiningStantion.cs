@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using System;
 
 public class MiningStantion : Building
 {
@@ -23,7 +24,7 @@ public class MiningStantion : Building
         StartCoroutine(MineResources());
     }
 
-    private void OnResourceTakenFromFullStorage()
+    private void OnResourceTakenFromFullStorage(Type typeOfTakenResource)
     {
         StartCoroutine(MineResources());
         _minedResourcesStorage.onResourceTaken -= OnResourceTakenFromFullStorage;

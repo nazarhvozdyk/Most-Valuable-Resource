@@ -3532,7 +3532,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _price:
-  - resource: {fileID: 1204947990188877835, guid: c4707be3c8641bf4f990461e52d160ef,
+  - resource: {fileID: -7818991369649622329, guid: d19883d363238794c806e842603183ee,
       type: 3}
     Amount: 10
   _fuelResources:
