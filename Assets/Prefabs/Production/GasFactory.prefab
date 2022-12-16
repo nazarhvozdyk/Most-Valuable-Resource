@@ -3535,6 +3535,9 @@ MonoBehaviour:
   - resource: {fileID: -7818991369649622329, guid: d19883d363238794c806e842603183ee,
       type: 3}
     Amount: 10
+  - resource: {fileID: 1204947990188877835, guid: c4707be3c8641bf4f990461e52d160ef,
+      type: 3}
+    Amount: 10
   _fuelResources:
   - {fileID: 1204947990188877835, guid: c4707be3c8641bf4f990461e52d160ef, type: 3}
   _producedResourcePrefab: {fileID: 4586045107909580579, guid: 3a0d827f2f4a20e4a964705b21921287,

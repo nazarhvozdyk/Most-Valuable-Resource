@@ -2,24 +2,43 @@ using System;
 using UnityEngine;
 using System.Collections.Generic;
 
+[DefaultExecutionOrder(1)]
 public class BuildingStorage : FuelStorage
 {
     [SerializeField]
-    private CreateBuildingPointer _buildingPointerPrefab;
+    private float _priceTagsOffset = 2;
+
+    [SerializeField]
+    private ResourceSpritesData _resourceSpritesData;
+
+    [SerializeField]
+    private ResourceUI _resourceUIPrefab;
+
+    [SerializeField]
+    private BuildingPointer _buildingPointerPrefab;
 
     [SerializeField]
     private Transform _pointerPositionTransform;
 
     [SerializeField]
+    private Transform _priceTagStartPositionTransform;
+
+    [SerializeField]
     private Building _buildingToBuildPrefab;
     private Dictionary<Type, int> _buildingPrice;
     private Dictionary<Type, int> _eachTypeAmount = new Dictionary<Type, int>();
-    private CreateBuildingPointer _pointer;
+    private BuildingPointer _pointer;
+    public Building BuildingToBuild
+    {
+        get => _buildingToBuildPrefab;
+    }
+    private Dictionary<Type, ResourceUI> _priceTags;
 
     protected override void Awake()
     {
         _buildingPrice = _buildingToBuildPrefab.Price;
         _capacity = 0;
+        _priceTags = new Dictionary<Type, ResourceUI>(_buildingPrice.Count);
 
         foreach (var item in _buildingPrice)
         {
@@ -35,6 +54,7 @@ public class BuildingStorage : FuelStorage
         Canvas canvas = BuildingStoragesCanvasReference.Instance.Canvas;
         _pointer = Instantiate(_buildingPointerPrefab, canvas.transform);
         _pointer.SetUp(_pointerPositionTransform.position);
+        CreatePriceTag();
     }
 
     public override Type[] GetTypesOfNeededResources()
@@ -56,6 +76,7 @@ public class BuildingStorage : FuelStorage
     public override bool TryToAddResource(Resource resource)
     {
         Type resourceType = resource.GetType();
+
         foreach (var item in _eachTypeAmount)
         {
             // return false if we have enough of this type of resources
@@ -75,7 +96,11 @@ public class BuildingStorage : FuelStorage
 
         if (isResourceAdded)
         {
+            // increase current resources number
             _eachTypeAmount[resourceType]++;
+
+            // decrease price tag cost
+            _priceTags[resourceType].Add(-1);
 
             bool isEnoungh = CheckIfEnoughToBuild();
 
@@ -102,7 +127,48 @@ public class BuildingStorage : FuelStorage
 
         Building newBuilding = Instantiate(_buildingToBuildPrefab);
         newBuilding.transform.position = transform.position;
+        OnBuildBuilded();
+    }
+
+    private void OnBuildBuilded()
+    {
+        // make it imposible to interact with player by changing position
+        transform.position = new Vector3(0, -100, 0);
+
         gameObject.SetActive(false);
         Destroy(_pointer.gameObject);
+
+        foreach (var item in _priceTags.Values)
+            Destroy(item.gameObject);
+
+        _priceTags = null;
+        _buildingPrice = null;
+    }
+
+    private void CreatePriceTag()
+    {
+        Canvas worldCanvas = WorldCanvasReference.Instance.Canvas;
+        int priceTagsAmounts = 0;
+
+        foreach (var item in _buildingPrice)
+        {
+            Type typeOfCurrentResource = item.Key;
+            int amountOfResources = item.Value;
+
+            Vector3 nextPosition =
+                _priceTagStartPositionTransform.position
+                + _priceTagStartPositionTransform.up * (_priceTagsOffset * priceTagsAmounts);
+
+            ResourceUI newResourceUI = Instantiate(_resourceUIPrefab, worldCanvas.transform);
+            newResourceUI.transform.position = nextPosition;
+            newResourceUI.gameObject.AddComponent<LookAtCamera>();
+
+            Sprite sprite = _resourceSpritesData.GetSpriteByResourceType(typeOfCurrentResource);
+
+            newResourceUI.SetSprite(sprite);
+            newResourceUI.Add(amountOfResources);
+            _priceTags.Add(typeOfCurrentResource, newResourceUI);
+            priceTagsAmounts++;
+        }
     }
 }

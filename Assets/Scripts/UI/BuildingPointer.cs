@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CreateBuildingPointer : MonoBehaviour
+public class BuildingPointer : MonoBehaviour
 {
     public void SetUp(Vector3 worldPosition)
     {

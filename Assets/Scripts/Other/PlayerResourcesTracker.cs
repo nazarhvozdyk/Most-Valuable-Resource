@@ -42,12 +42,7 @@ public class PlayerResourcesTracker : MonoBehaviour
 
     private ResourceUI CreateIconForNewResource(Type newResoureType)
     {
-        Sprite resourceSprite;
-
-        if (newResoureType == typeof(Oil))
-            resourceSprite = _resourceSpritesData.Oil;
-        else
-            resourceSprite = _resourceSpritesData.Oil;
+        Sprite resourceSprite = _resourceSpritesData.GetSpriteByResourceType(newResoureType);
 
         ResourceUI newResourceUI = Instantiate(_resourceUIPrefab, _newResourceUIParent);
         newResourceUI.SetSprite(resourceSprite);
@@ -62,7 +57,7 @@ public class PlayerResourcesTracker : MonoBehaviour
         if (resourceUI)
             resourceUI.Add(-1);
 
-        if (resourceUI.CurrentResourceAmount == 0) 
+        if (resourceUI.CurrentResourceAmount == 0)
         {
             _resourcesInUI.Remove(takenResourceType);
             Destroy(resourceUI.gameObject);

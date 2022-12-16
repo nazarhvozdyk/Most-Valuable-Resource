@@ -45,11 +45,6 @@ public class InteractionSystem : MonoBehaviour
         _instance = this;
     }
 
-    private void Start() 
-    { 
-        Application.targetFrameRate = 15;
-    }
-
     private void Update()
     {
         ResourcesStorage playerStorage = Player.Instance.ResourcesStorage;
