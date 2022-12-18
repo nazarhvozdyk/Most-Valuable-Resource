@@ -4,12 +4,6 @@ using UnityEngine;
 
 public class InteractionSystem : MonoBehaviour
 {
-    private static InteractionSystem _instance;
-    public static InteractionSystem Instance
-    {
-        get => _instance;
-    }
-
     [SerializeField]
     private float _interactionRadious = 2;
     public float InteractionDistance
@@ -39,11 +33,6 @@ public class InteractionSystem : MonoBehaviour
 
     // storable object, we interact with at the moment
     private IStorable _currentStorableObject;
-
-    private void Awake()
-    {
-        _instance = this;
-    }
 
     private void Update()
     {

@@ -44,6 +44,73 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _invert: 0
+--- !u!1 &1134751425874343690
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1545676085903266962}
+  - component: {fileID: 572770010666539519}
+  - component: {fileID: 7251474954787792865}
+  m_Layer: 3
+  m_Name: PriceStorage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1545676085903266962
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1134751425874343690}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1943168525754066205}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &572770010666539519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1134751425874343690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2b0226d843668743ba06fa6abb2bb85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _resourceParent: {fileID: 1943168526524089734}
+  _capacity: 20
+  _rowsCount: 4
+  _colsCount: 5
+  _resourceUIPrefab: {fileID: 2961331558319945847, guid: aaab3f0caab1a6743b49a6a404324ae5,
+    type: 3}
+  _priceTagsOffset: 2
+  _resourceSpritesData: {fileID: 11400000, guid: e8a7fbefc110a1a48a9849f15571d36c,
+    type: 2}
+  _priceTagStartPositionTransform: {fileID: 606503405991555755}
+--- !u!135 &7251474954787792865
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1134751425874343690}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1943168525754066204
 GameObject:
   m_ObjectHideFlags: 0
@@ -53,7 +120,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1943168525754066205}
-  - component: {fileID: 5017751123105629987}
   - component: {fileID: 1943168525754066179}
   m_Layer: 3
   m_Name: BuildingStorage
@@ -77,22 +143,10 @@ Transform:
   - {fileID: 5320048216483622715}
   - {fileID: 2892904175351408937}
   - {fileID: 606503405991555755}
+  - {fileID: 1545676085903266962}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &5017751123105629987
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1943168525754066204}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1943168525754066179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,19 +159,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c331e1a621e3a44ea24ce5de6b97bbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _resourceParent: {fileID: 1943168526524089734}
-  _capacity: 30
-  _rowsCount: 1
-  _colsCount: 1
-  _priceTagsOffset: 2
-  _resourceSpritesData: {fileID: 11400000, guid: e8a7fbefc110a1a48a9849f15571d36c,
-    type: 2}
-  _resourceUIPrefab: {fileID: 2961331558319945847, guid: aaab3f0caab1a6743b49a6a404324ae5,
-    type: 3}
+  _pointerPositionTransform: {fileID: 2892904175351408937}
   _buildingPointerPrefab: {fileID: 3339402118703387608, guid: 65409819a579849479635d8993d16703,
     type: 3}
-  _pointerPositionTransform: {fileID: 2892904175351408937}
-  _priceTagStartPositionTransform: {fileID: 606503405991555755}
+  _priceStorage: {fileID: 572770010666539519}
   _buildingToBuildPrefab: {fileID: 0}
 --- !u!1 &1943168526524089737
 GameObject:
@@ -160,7 +205,7 @@ GameObject:
   - component: {fileID: 606503405991555755}
   - component: {fileID: 420833157822713173}
   m_Layer: 3
-  m_Name: PriceStartPosition
+  m_Name: PriceTagsStartPosition
   m_TagString: Untagged
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -202,7 +247,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5320048216483622715}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: GFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -236,7 +281,7 @@ GameObject:
   - component: {fileID: 4841246056117382085}
   - component: {fileID: 9098094774016806591}
   - component: {fileID: 9039221191696495264}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Wood (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -317,7 +362,7 @@ GameObject:
   - component: {fileID: 13785175831618260}
   - component: {fileID: 6674664666988624905}
   - component: {fileID: 1247061643678542218}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Wood
   m_TagString: Untagged
   m_Icon: {fileID: 0}
