@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f877829b8fe3c8c4cbe813e9666e5ff8, type: 3}
   m_Name: StoragesData
   m_EditorClassIdentifier: 
-  _gridOffset: 0.5
+  _gridOffset: 0.3

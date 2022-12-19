@@ -34,6 +34,10 @@ public class InteractionSystem : MonoBehaviour
     // storable object, we interact with at the moment
     private IStorable _currentStorableObject;
 
+    private void Start() 
+    {
+        Application.targetFrameRate = 15;    
+    }
     private void Update()
     {
         ResourcesStorage playerStorage = Player.Instance.ResourcesStorage;

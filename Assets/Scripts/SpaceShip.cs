@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class SpaceShip : MonoBehaviour
 {
+    private static SpaceShip _instance;
+    public static SpaceShip Instance
+    {
+        get => _instance;
+    }
+
     [SerializeField]
     private List<ResourceAmount> _neededResourcesToFlyInspector;
 
@@ -13,6 +19,8 @@ public class SpaceShip : MonoBehaviour
 
     private void Awake()
     {
+        _instance = this;
+
         _neededResourcesToFly = new Dictionary<Type, int>(_neededResourcesToFlyInspector.Count);
 
         for (int i = 0; i < _neededResourcesToFlyInspector.Count; i++)

@@ -14,8 +14,14 @@ public class GameManager
         }
     }
 
-    public void OnLevelTaskComplited() 
+    public void OnLevelTaskComplited()
     {
-        // end the level
+        Debug.Log("level task complited");
+        Player.Instance.SitInSpaceShip();
+    }
+
+    public void OnPlayerSitOnShip()
+    {
+        Debug.Log("level finished");
     }
 }
