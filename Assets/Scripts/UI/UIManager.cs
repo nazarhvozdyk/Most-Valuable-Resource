@@ -1,18 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private static UIManager _instance;
+    public static UIManager Instance
     {
-        
+        get => _instance;
     }
 
-    // Update is called once per frame
-    void Update()
+    [SerializeField]
+    private ScreenFadeAnimations _screenFadeAnimations;
+
+    private void Awake()
     {
-        
+        _instance = this;
+    }
+
+    private void Start()
+    {
+        OnLevelLoaded();
+    }
+
+    public void OnLevelEnded()
+    {
+        _screenFadeAnimations.StartFadeOutAnimation();
+    }
+
+    public void OnLevelLoaded()
+    {
+        _screenFadeAnimations.StartFadeInAnimation();
     }
 }

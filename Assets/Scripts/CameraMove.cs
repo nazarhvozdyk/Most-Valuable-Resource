@@ -8,6 +8,11 @@ public class CameraMove : MonoBehaviour
     [SerializeField]
     float _lerpRate = 8f;
 
+    private void Start()
+    {
+        transform.position = _targetTransform.position;
+    }
+
     private void LateUpdate()
     {
         transform.position = Vector3.Lerp(

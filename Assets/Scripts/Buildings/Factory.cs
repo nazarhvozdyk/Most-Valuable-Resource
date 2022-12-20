@@ -26,7 +26,7 @@ public class Factory : Building
 
     // the start position of spawned resource
     [SerializeField]
-    private Transform _resourceStartPositionTransform;
+    private Transform _producedResourceStartPositionTransform;
 
     [SerializeField]
     private int _resourcesInMinute = 60;
@@ -36,17 +36,16 @@ public class Factory : Building
         get => _fuelResources;
     }
     private bool _isProducing = false;
-
-    private void OnEnable()
-    {
-        _prodactionRate = 60f / _resourcesInMinute;
-    }
-
     private Type[] _fuelResourcesTypes;
     public delegate void FactoryStopHandler(StopReason stopReason);
     public event FactoryStopHandler onFactoryStopped;
     public delegate void FactoryStartHandler();
     public event FactoryStartHandler onFactoryStartProducing;
+
+    private void OnEnable()
+    {
+        _prodactionRate = 60f / _resourcesInMinute;
+    }
 
     private void Start()
     {
@@ -112,7 +111,7 @@ public class Factory : Building
             }
 
             Resource producedResource = Instantiate(_producedResourcePrefab);
-            producedResource.transform.position = _resourceStartPositionTransform.position;
+            producedResource.transform.position = _producedResourceStartPositionTransform.position;
 
             _producedResourcesStorage.TryToAddResource(producedResource);
 
