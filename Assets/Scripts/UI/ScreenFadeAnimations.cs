@@ -9,18 +9,20 @@ public class ScreenFadeAnimations : MonoBehaviour
 
     [SerializeField]
     private Image _animatedImage;
+    public delegate void AnimationEndedCallBack();
+
 
     public void StartFadeInAnimation()
     {
         StartCoroutine(FadeIn());
     }
 
-    public void StartFadeOutAnimation()
+    public void StartFadeOutAnimation(AnimationEndedCallBack callBack)
     {
-        StartCoroutine(FadeOut());
+        StartCoroutine(FadeOut(callBack));
     }
 
-    private IEnumerator FadeOut()
+    private IEnumerator FadeOut(AnimationEndedCallBack callBack)
     {
         _animatedImage.enabled = true;
 
@@ -36,6 +38,7 @@ public class ScreenFadeAnimations : MonoBehaviour
         Color finalColor = _animatedImage.color;
         finalColor.a = 1f;
         _animatedImage.color = finalColor;
+        callBack();
     }
 
     private IEnumerator FadeIn()

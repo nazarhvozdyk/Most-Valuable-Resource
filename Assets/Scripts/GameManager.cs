@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager
 {
@@ -13,6 +14,7 @@ public class GameManager
             return _instance;
         }
     }
+    private int _currentLevel = 1;
 
     public void OnLevelTaskComplited()
     {
@@ -21,6 +23,28 @@ public class GameManager
 
     public void FinishTheLevel()
     {
-        UIManager.Instance.OnLevelEnded();
+        ScreenFadeAnimations.AnimationEndedCallBack callBack = LoadNextLevel;
+        UIManager.Instance.AnimateLevelEnding(callBack);
+    }
+
+    private void LoadNextLevel()
+    {
+        if (SceneManager.sceneCount == _currentLevel)
+            LoadGameOverScene();
+        else
+            SceneManager.LoadScene(++_currentLevel);
+    }
+
+    private void LoadGameOverScene()
+    {
+        _currentLevel = 0;
+        int indexOfGameOverScene = 0;
+        SceneManager.LoadScene(indexOfGameOverScene);
+    }
+
+    public void LoadFirstLevel()
+    {
+        _currentLevel = 1;
+        SceneManager.LoadScene(_currentLevel);
     }
 }

@@ -17,6 +17,9 @@ public class SpaceShip : MonoBehaviour
     private PriceStorage _priceStorage;
     private Dictionary<Type, int> _neededResourcesToFly;
 
+    [SerializeField]
+    private ParticleSystem _flameEffect;
+
     private void Awake()
     {
         _instance = this;
@@ -32,12 +35,14 @@ public class SpaceShip : MonoBehaviour
 
     private void Start()
     {
+        _flameEffect.Stop();
         _priceStorage.SetUp(_neededResourcesToFly);
         _priceStorage.onStorageIsFull += OnStorageIsFull;
     }
 
     private void OnStorageIsFull()
     {
+        _flameEffect.Play();
         GameManager.Instance.OnLevelTaskComplited();
     }
 }

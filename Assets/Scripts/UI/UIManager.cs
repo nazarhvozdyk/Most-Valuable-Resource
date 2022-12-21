@@ -21,9 +21,9 @@ public class UIManager : MonoBehaviour
         OnLevelLoaded();
     }
 
-    public void OnLevelEnded()
+    public void AnimateLevelEnding(ScreenFadeAnimations.AnimationEndedCallBack callBack)
     {
-        _screenFadeAnimations.StartFadeOutAnimation();
+        _screenFadeAnimations.StartFadeOutAnimation(callBack);
     }
 
     public void OnLevelLoaded()
