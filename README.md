@@ -1,4 +1,4 @@
-# Test
+# My new game
 Screenshots
 
 ![screenShoot_2](https://user-images.githubusercontent.com/49373647/209173350-6effe3b7-f56b-4918-a214-a069faecc4aa.png)
