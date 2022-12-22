@@ -7,9 +7,21 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cd136febcf5692740b38e61dbe95c338, type: 3}
   m_Name: ResourceSpritesData
   m_EditorClassIdentifier: 
-  _oilSprite: {fileID: 21300000, guid: 2e43f0691f0d7404eae8d01381da65a0, type: 3}
+  resourceIconData:
+  - sprite: {fileID: 21300000, guid: eaeae5708a4aaa240b26199a29c7fccd, type: 3}
+    resource: {fileID: -7818991369649622329, guid: d19883d363238794c806e842603183ee,
+      type: 3}
+  - sprite: {fileID: 21300000, guid: 1f6c49df9914c9f489bef17f3b944b27, type: 3}
+    resource: {fileID: 4586045107909580579, guid: 3a0d827f2f4a20e4a964705b21921287,
+      type: 3}
+  - sprite: {fileID: 21300000, guid: 66d7feb74191fe4499cdd9ecf289e7c3, type: 3}
+    resource: {fileID: 7062086287542749938, guid: d75aa09aabdc17a4d931f51a856aac18,
+      type: 3}
+  - sprite: {fileID: 21300000, guid: 76a06bc93841c9e489d8771762f989e6, type: 3}
+    resource: {fileID: 1204947990188877835, guid: c4707be3c8641bf4f990461e52d160ef,
+      type: 3}

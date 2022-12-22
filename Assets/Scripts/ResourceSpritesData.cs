@@ -5,10 +5,18 @@ using UnityEngine;
 public class ResourceSpritesData : ScriptableObject
 {
     [SerializeField]
-    private Sprite _oilSprite;
+    private ResourceIconData[] resourceIconData;
 
     public Sprite GetSpriteByResourceType(Type type)
     {
-        return _oilSprite;
+        for (int i = 0; i < resourceIconData.Length; i++)
+        {
+            if (resourceIconData[i].resource.GetType() == type)
+            {
+                return resourceIconData[i].sprite;
+            }
+        }
+
+        return null;
     }
 }
