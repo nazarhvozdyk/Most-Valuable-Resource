@@ -11,6 +11,13 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private ScreenFadeAnimations _screenFadeAnimations;
 
+    [SerializeField]
+    private ResourceSpritesData _resourceIconData;
+    public ResourceSpritesData ResourceIconData
+    {
+        get => _resourceIconData;
+    }
+
     private void Awake()
     {
         _instance = this;

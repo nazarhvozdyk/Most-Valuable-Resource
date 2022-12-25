@@ -5,9 +5,6 @@ using UnityEngine;
 public class PlayerResourcesTracker : MonoBehaviour
 {
     [SerializeField]
-    private ResourceSpritesData _resourceSpritesData;
-
-    [SerializeField]
     private ResourceUI _resourceUIPrefab;
 
     [SerializeField]
@@ -30,7 +27,6 @@ public class PlayerResourcesTracker : MonoBehaviour
             addedResourceType,
             out resourceUI
         );
-
         if (!isPlayerAlreadyHasThisResource)
         {
             resourceUI = CreateIconForNewResource(addedResourceType);
@@ -42,7 +38,8 @@ public class PlayerResourcesTracker : MonoBehaviour
 
     private ResourceUI CreateIconForNewResource(Type newResoureType)
     {
-        Sprite resourceSprite = _resourceSpritesData.GetSpriteByResourceType(newResoureType);
+        ResourceSpritesData resourceSpritesData = UIManager.Instance.ResourceIconData;
+        Sprite resourceSprite = resourceSpritesData.GetSpriteByResourceType(newResoureType);
 
         ResourceUI newResourceUI = Instantiate(_resourceUIPrefab, _newResourceUIParent);
         newResourceUI.SetSprite(resourceSprite);

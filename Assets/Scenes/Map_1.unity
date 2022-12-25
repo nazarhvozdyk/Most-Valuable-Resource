@@ -4098,7 +4098,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _neededResourcesToFlyInspector.Array.data[0].resource
       value: 
-      objectReference: {fileID: 4586045107909580579, guid: 3a0d827f2f4a20e4a964705b21921287,
+      objectReference: {fileID: 1204947990188877835, guid: c4707be3c8641bf4f990461e52d160ef,
         type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b90cdfdb3490734b965007d4c0ffc3c, type: 3}
@@ -5091,6 +5091,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _screenFadeAnimations: {fileID: 1552220705}
+  _resourceIconData: {fileID: 11400000, guid: e8a7fbefc110a1a48a9849f15571d36c, type: 2}
 --- !u!114 &1552220705
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6094,9 +6095,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7b4f395681ad614993e615d5d6c0776, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _resourceSpritesData: {fileID: 11400000, guid: e8a7fbefc110a1a48a9849f15571d36c,
-    type: 2}
-  _resourceUIPrefab: {fileID: 2961331558319945847, guid: aaab3f0caab1a6743b49a6a404324ae5,
+  _resourceUIPrefab: {fileID: 2961331558319945847, guid: cc2312a94bc47fb48a4ee7d4fed8ddda,
     type: 3}
   _newResourceUIParent: {fileID: 1783826284}
 --- !u!4 &1924352517
@@ -6670,7 +6669,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _buildingToBuildPrefab
       value: 
-      objectReference: {fileID: 6769826367827165114, guid: 582fbf853c4e59e43a9c781112efe327,
+      objectReference: {fileID: 3122907989918483995, guid: 317a299b2f0a66e4985f57dc002145ea,
         type: 3}
     - target: {fileID: 1943168525754066204, guid: ec7a5e9c6a0cd7742bea69432c0284f0,
         type: 3}

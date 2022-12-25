@@ -20,6 +20,11 @@ public class ResourceUI : MonoBehaviour
         _resourceImage.sprite = sprite;
     }
 
+    public void ClearText()
+    {
+        _amountText.text = string.Empty;
+    }
+
     public void Add(int amount)
     {
         _currentResourceAmount += amount;

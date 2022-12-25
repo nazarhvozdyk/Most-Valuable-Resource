@@ -22,6 +22,19 @@ public class FactoryFuelStorage : FuelStorage
     {
         for (int i = 0; i < ResourcesToStore.Length; i++)
             _eachTypeAmount.Add(ResourcesToStore[i].GetType(), 0);
+
+        ResourceAmount[] resourcesAmount = new ResourceAmount[ResourcesToStore.Length];
+        for (int i = 0; i < resourcesAmount.Length; i++)
+        {
+            ResourceAmount resourceAmount = new ResourceAmount()
+            {
+                Amount = 1,
+                resource = ResourcesToStore[i]
+            };
+
+            resourcesAmount[i] = resourceAmount;
+        }
+        GetComponent<ResourceHint>().SetUp(resourcesAmount);
     }
 
     public override bool TryToAddResource(Resource resource)

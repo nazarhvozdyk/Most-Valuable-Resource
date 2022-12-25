@@ -14,7 +14,6 @@ public class GameManager
             return _instance;
         }
     }
-    private int _currentLevel = 1;
 
     public void OnLevelTaskComplited()
     {
@@ -29,22 +28,22 @@ public class GameManager
 
     private void LoadNextLevel()
     {
-        if (SceneManager.sceneCount == _currentLevel)
+        int indexOfCurrentScene = SceneManager.GetActiveScene().buildIndex;
+        if (SceneManager.sceneCountInBuildSettings == indexOfCurrentScene)
             LoadGameOverScene();
         else
-            SceneManager.LoadScene(++_currentLevel);
+            SceneManager.LoadScene(++indexOfCurrentScene);
     }
 
     private void LoadGameOverScene()
     {
-        _currentLevel = 0;
         int indexOfGameOverScene = 0;
         SceneManager.LoadScene(indexOfGameOverScene);
     }
 
     public void LoadFirstLevel()
     {
-        _currentLevel = 1;
-        SceneManager.LoadScene(_currentLevel);
+        int indexOfFirstLevel = 1;
+        SceneManager.LoadScene(indexOfFirstLevel);
     }
 }

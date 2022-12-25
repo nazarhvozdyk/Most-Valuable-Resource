@@ -89,8 +89,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2961331558319945800}
   - component: {fileID: 2961331558319945847}
+  - component: {fileID: 1828622160147605325}
   m_Layer: 5
-  m_Name: ResourceUI
+  m_Name: ResourceWorldUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -131,6 +132,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _resourceImage: {fileID: 2961331558479323034}
   _amountText: {fileID: 2961331558146493398}
+--- !u!114 &1828622160147605325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2961331558319945801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bff12787d7f55bc4790c54a2dd8e92c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _invert: 0
 --- !u!1 &2961331558479323036
 GameObject:
   m_ObjectHideFlags: 0

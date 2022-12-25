@@ -11,9 +11,6 @@ public class PriceStorage : FuelStorage
     private float _priceTagsOffset = 2;
 
     [SerializeField]
-    private ResourceSpritesData _resourceSpritesData;
-
-    [SerializeField]
     private Transform _priceTagStartPositionTransform;
 
     private Dictionary<Type, int> _price;
@@ -118,9 +115,9 @@ public class PriceStorage : FuelStorage
 
             ResourceUI newResourceUI = Instantiate(_resourceUIPrefab, worldCanvas.transform);
             newResourceUI.transform.position = nextPosition;
-            newResourceUI.gameObject.AddComponent<LookAtCamera>();
 
-            Sprite sprite = _resourceSpritesData.GetSpriteByResourceType(typeOfCurrentResource);
+            ResourceSpritesData resourceSpritesData = UIManager.Instance.ResourceIconData;
+            Sprite sprite = resourceSpritesData.GetSpriteByResourceType(typeOfCurrentResource);
 
             newResourceUI.SetSprite(sprite);
             newResourceUI.Add(amountOfResources);

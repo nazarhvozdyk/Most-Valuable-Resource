@@ -8,6 +8,12 @@ public class CameraMove : MonoBehaviour
     [SerializeField]
     float _lerpRate = 8f;
 
+    private void OnEnable()
+    {
+        if (_targetTransform == null)
+            _targetTransform = Player.Instance.transform;
+    }
+
     private void Start()
     {
         transform.position = _targetTransform.position;
