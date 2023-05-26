@@ -15,6 +15,7 @@ public class FactoryPointer : MonoBehaviour
 
     [SerializeField]
     private float _animationTime = 1f;
+    private bool _isActive;
 
     private void Start()
     {
@@ -40,12 +41,18 @@ public class FactoryPointer : MonoBehaviour
             _pointerController.SetSprite(_pointerImagesData.NoSpaceSprite);
             StartCoroutine(Show());
         }
+
+        _isActive = true;
     }
 
     private void OnFactoryStarted()
     {
-        StopAllCoroutines();
-        StartCoroutine(Hide());
+        if (_isActive)
+        {
+            _isActive = false;
+            StopAllCoroutines();
+            StartCoroutine(Hide());
+        }
     }
 
     private void LateUpdate()

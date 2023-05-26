@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: ResourceSpritesData
   m_EditorClassIdentifier: 
   resourceIconData:
-  - sprite: {fileID: 21300000, guid: eaeae5708a4aaa240b26199a29c7fccd, type: 3}
+  - sprite: {fileID: 21300000, guid: 62b231e0806f61541ac479b4520f2155, type: 3}
     resource: {fileID: -7818991369649622329, guid: d19883d363238794c806e842603183ee,
       type: 3}
-  - sprite: {fileID: 21300000, guid: 1f6c49df9914c9f489bef17f3b944b27, type: 3}
+  - sprite: {fileID: 21300000, guid: dc1c94f7aecaddc418aab1092b38d663, type: 3}
     resource: {fileID: 4586045107909580579, guid: 3a0d827f2f4a20e4a964705b21921287,
       type: 3}
-  - sprite: {fileID: 21300000, guid: 66d7feb74191fe4499cdd9ecf289e7c3, type: 3}
+  - sprite: {fileID: 21300000, guid: 2d8c48e15fbba0d4a9b4633adbf15eff, type: 3}
     resource: {fileID: 7062086287542749938, guid: d75aa09aabdc17a4d931f51a856aac18,
       type: 3}
-  - sprite: {fileID: 21300000, guid: 76a06bc93841c9e489d8771762f989e6, type: 3}
+  - sprite: {fileID: 21300000, guid: b1cca926703438147a0a87cafb916cab, type: 3}
     resource: {fileID: 1204947990188877835, guid: c4707be3c8641bf4f990461e52d160ef,
       type: 3}

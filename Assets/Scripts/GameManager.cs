@@ -29,7 +29,7 @@ public class GameManager
     private void LoadNextLevel()
     {
         int indexOfCurrentScene = SceneManager.GetActiveScene().buildIndex;
-        if (SceneManager.sceneCountInBuildSettings == indexOfCurrentScene)
+        if (SceneManager.sceneCountInBuildSettings == indexOfCurrentScene + 1)
             LoadGameOverScene();
         else
             SceneManager.LoadScene(++indexOfCurrentScene);
